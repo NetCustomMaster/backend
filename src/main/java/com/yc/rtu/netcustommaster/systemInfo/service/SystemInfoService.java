@@ -27,10 +27,23 @@ public class SystemInfoService {
     public Map<String, Object> getCpuUsage() {
         Map<String, Object> response = new HashMap<>();
         String command = "wmic cpu get loadpercentage";
-        String cpuUsage = executeCommand(command);
+        String output = executeCommand(command);
+
+        // 결과에서 숫자만 추출
+        String[] lines = output.split("\\r?\\n");
+        String cpuUsage = "";
+        for (String line : lines) {
+            line = line.trim();
+            if (line.matches("\\d+")) { // 숫자로만 구성된 줄 찾기
+                cpuUsage = line + "%";
+                break;
+            }
+        }
+
         response.put("cpuUsage", cpuUsage);
         return response;
     }
+
 
 
 //    public Map<String, Object> getMemoryUsage() {
