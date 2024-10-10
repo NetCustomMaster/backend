@@ -12,4 +12,8 @@ public class AdminService {
     public boolean authenticate(String username, String password) {
         return adminUsername.equals(username) && adminPassword.equals(password);
     }
+    public boolean changepassword(String password){
+        adminPassword=password;
+        return true;
+    }
 }
