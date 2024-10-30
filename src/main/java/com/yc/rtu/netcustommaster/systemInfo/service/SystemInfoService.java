@@ -17,6 +17,7 @@ public class SystemInfoService {
         systemInfo.setCpuUsage(getCpuUsage());
         systemInfo.setMemoryUsage(getMemoryUsage());
         systemInfo.setInternetSpeed(getInternetSpeed());
+        systemInfo.setConnectedDevices(getConnectedDevices());
         return systemInfo;
     }
 
