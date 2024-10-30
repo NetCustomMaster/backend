@@ -3,11 +3,10 @@ package com.yc.rtu.netcustommaster.systemInfo.service;
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
 @Service
 public class SystemInfoService {
@@ -44,19 +43,5 @@ public class SystemInfoService {
         return Arrays.asList(output.split("\n")); // 결과를 리스트로 변환
     }
 
-    private String executeCommand(String command) {
-        StringBuilder output = new StringBuilder();
-        try {
-            Process process = Runtime.getRuntime().exec(new String[] { "bash", "-c", command });
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return output.toString().trim(); // Trim to remove trailing newlines
-    }
+
 }
