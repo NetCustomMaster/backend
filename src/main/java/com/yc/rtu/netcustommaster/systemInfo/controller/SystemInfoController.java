@@ -14,13 +14,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/system-info")
+@RequestMapping("/api/v1/state")
 @RequiredArgsConstructor
 public class SystemInfoController {
 
     private final SystemInfoService systemInfoService;
 
-    @GetMapping("/stream")
+    @GetMapping("/resource")
     public SseEmitter streamSystemInfo() {
         SseEmitter emitter = new SseEmitter();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
