@@ -22,7 +22,7 @@ public class SystemInfoController {
 
     @GetMapping("/resource")
     public SseEmitter streamSystemInfo() {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(120_000L);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
         executorService.scheduleAtFixedRate(() -> {
