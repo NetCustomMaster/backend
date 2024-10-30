@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.systemInfo.service;
 
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
+@Slf4j
 @Service
 public class SystemInfoService {
 
@@ -17,6 +19,7 @@ public class SystemInfoService {
         systemInfo.setMemoryUsage(getMemoryUsage());
         systemInfo.setInternetSpeed(getInternetSpeed());
         systemInfo.setConnectedDevices(getConnectedDevices());
+        log.info("systemInfo : {}", systemInfo);
         return systemInfo;
     }
 

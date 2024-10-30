@@ -30,15 +30,16 @@ public class SystemInfoController {
                 SystemInfoResponseDto systemInfo = systemInfoService.getSystemInfo();
 
                 String message = String.format(
-                        "{ \"cpuUsage\": \"%s\", \"memoryUsage\": \"%s\", \"internetSpeed\": \"%s\", \"connectedDevices\": %s }",
+                        "{ \"cpuUsage\": \"%s\", \"memoryUsage\": \"%s\", \"internetSpeed\": \"%s\", \"connectedDevices\": \"%s\" }",
                         systemInfo.getCpuUsage(), systemInfo.getMemoryUsage(), systemInfo.getInternetSpeed(),
-                        systemInfo.getConnectedDevices()
+                        String.join(", ", systemInfo.getConnectedDevices())
                 );
 
                 emitter.send(SseEmitter.event().data(message));
 
             } catch (IOException e) {
                 emitter.completeWithError(e);
+                executorService.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS); // 1초마다 데이터 전송
 
