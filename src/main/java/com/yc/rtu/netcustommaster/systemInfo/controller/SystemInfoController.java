@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.systemInfo.controller;
 
 import com.yc.rtu.netcustommaster.systemInfo.service.SystemInfoService;
+import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,32 +9,30 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/system-info")
+@RequestMapping("/api/v1/state")
 @RequiredArgsConstructor
 public class SystemInfoController {
 
     private final SystemInfoService systemInfoService;
 
-    @GetMapping("/stream")
+    @GetMapping("/resource")
     public SseEmitter streamSystemInfo() {
         SseEmitter emitter = new SseEmitter();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
         executorService.scheduleAtFixedRate(() -> {
             try {
-                Map<String, Object> cpuUsage = systemInfoService.getCpuUsage();
-                Map<String, Object> memoryUsage = systemInfoService.getMemoryUsage();
-                Map<String, Object> internetSpeed = systemInfoService.getInternetSpeed();
+                SystemInfoResponseDto systemInfo = systemInfoService.getSystemInfo();
 
                 String message = String.format(
-                        "{ \"cpuUsage\": \"%s\", \"memoryUsage\": \"%s\", \"internetSpeed\": \"%s\" }",
-                        cpuUsage.get("cpuUsage"), memoryUsage.get("memoryUsage"), "100Mps"
+                        "{ \"cpuUsage\": \"%s\", \"memoryUsage\": \"%s\", \"internetSpeed\": \"%s\", \"connectedDevices\": %s }",
+                        systemInfo.getCpuUsage(), systemInfo.getMemoryUsage(), systemInfo.getInternetSpeed(),
+                        systemInfo.getConnectedDevices()
                 );
 
                 emitter.send(SseEmitter.event().data(message));
