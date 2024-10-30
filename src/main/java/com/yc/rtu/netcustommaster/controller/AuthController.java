@@ -24,6 +24,7 @@ public class AuthController {
             return "로그인해주세요";
         }
     }
+
     //처음 사용하는 사용자 회원가입
     @PostMapping("/register")
     public String register(@RequestBody Map<String, String> request) {

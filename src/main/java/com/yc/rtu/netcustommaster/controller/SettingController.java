@@ -3,10 +3,7 @@ package com.yc.rtu.netcustommaster.controller;
 import com.yc.rtu.netcustommaster.service.AuthService;
 import com.yc.rtu.netcustommaster.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -17,8 +14,9 @@ public class SettingController {
     private AuthService authService;
     @Autowired
     private SettingService settingService;
+
     //관리자 비밀번호 변경
-    @PostMapping("/password")
+    @PatchMapping("/password")
     public String handleChangePassword(@RequestBody Map<String, String> request) {
         String username = request.get("username");
         String password = request.get("password");
@@ -29,8 +27,9 @@ public class SettingController {
             return "비밀번호 변경 실패";
         }
     }
+    
     // 와이파이 비밀번호 변경 API
-    @PostMapping("/wifipassword")
+    @PatchMapping("/wifipassword")
     //이전 패스워드, 새 패스워드를 받고
     public String changePassword(@RequestBody Map<String,String> request) {
         String newPassword = request.get("newpassword");

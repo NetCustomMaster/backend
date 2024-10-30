@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
+import java.util.logging.Level;
 
 @Service
 public class AuthService {
+
     //비밀번호 보안 강화를 위한 암호화 도구 사용
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final String CONFIG_PATH = "backend\\src\\main\\java\\com\\yc\\rtu\\netcustommaster\\properties\\config.properties"; // 설정 파일 경로
@@ -17,7 +19,7 @@ public class AuthService {
         try (FileInputStream input = new FileInputStream(CONFIG_PATH)) {
             config.load(input);
         } catch (Exception e) {
-            e.printStackTrace();
+           e.printStackTrace();
         }
         return config;
     }
