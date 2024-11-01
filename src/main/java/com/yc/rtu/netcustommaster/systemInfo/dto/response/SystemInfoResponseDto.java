@@ -1,5 +1,7 @@
 package com.yc.rtu.netcustommaster.systemInfo.dto.response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
 import java.util.List;
@@ -10,9 +12,13 @@ public class SystemInfoResponseDto {
     private String memoryUsage;
     private List<String> connectedDevices;
 
-    @Override
-    public String toString() {
-        String devices = (connectedDevices != null) ? String.join(", ", connectedDevices) : "없음";
-        return String.format("cpuUsage: %s, memoryUsage: %s, connectedDevices: [%s]", cpuUsage, memoryUsage, devices);
+    public String toJson() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{}"; // 오류 발생 시 빈 JSON 반환
+        }
     }
 }

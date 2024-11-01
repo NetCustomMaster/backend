@@ -37,7 +37,7 @@ public class SystemInfoController {
 
         executorService.scheduleAtFixedRate(() -> {
             try {
-                emitter.send(SseEmitter.event().data(systemInfoService.getSystemInfo().toString()));
+                emitter.send(SseEmitter.event().data(systemInfoService.getSystemInfo().toJson()));
             } catch (IOException e) {
                 emitter.completeWithError(e);
                 executorService.shutdown();
