@@ -38,7 +38,6 @@ public class SystemInfoController {
 
         executorService.scheduleAtFixedRate(() -> {
             try {
-                SystemInfoResponseDto systemInfo = systemInfoService.getSystemInfo();
                 emitter.send(SseEmitter.event().data(message));
             } catch (IOException e) {
                 emitter.completeWithError(e);
