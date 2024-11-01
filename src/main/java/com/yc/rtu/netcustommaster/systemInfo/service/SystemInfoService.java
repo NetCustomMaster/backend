@@ -28,9 +28,7 @@ public class SystemInfoService {
     }
 
     private String getCpuUsage() {
-        String command = "top -bn1 | grep 'Cpu(s)' | " +
-                "sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | " +
-                "awk '{print 100 - $1\"%\"}'";
+        String command = "top -bn2 -d 0.5 | grep \"Cpu(s)\" | tail -n 1 | awk '{ usage = 100 - $8; printf \"%.1f%%\\n\", usage }'";
         return executeCommand(command);
     }
 
