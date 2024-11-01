@@ -20,7 +20,7 @@ public class SystemInfoService {
         return systemInfo;
     }
 
-    public SpeedTestCliResponseDto getSpeedTestCli(){
+    public SpeedTestCliResponseDto getSpeedTestCli() {
         SpeedTestCliResponseDto speedTestCli = new SpeedTestCliResponseDto();
         speedTestCli.setInternetSpeed(getInternetSpeed());
         return speedTestCli;
@@ -48,6 +48,4 @@ public class SystemInfoService {
         String output = executeCommand(command);
         return Arrays.asList(output.split("\n")); // 결과를 리스트로 변환
     }
-
-
 }

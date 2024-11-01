@@ -24,21 +24,21 @@ public class SystemInfoController {
 
     @GetMapping("/resource")
     public SseEmitter streamSystemInfo() {
-        return sseEmit(systemInfoService.getSystemInfo().toString());
+        return createSystemInfoEmitter();
     }
 
     @GetMapping("/speed")
-    public ResponseEntity<SpeedTestCliResponseDto> speedTestCli(){
-        return ResponseEntity.ok().body(systemInfoService.getSpeedTestCli());
+    public ResponseEntity<SpeedTestCliResponseDto> speedTestCli() {
+        return ResponseEntity.ok(systemInfoService.getSpeedTestCli());
     }
 
-    private SseEmitter sseEmit(String message){
+    private SseEmitter createSystemInfoEmitter() {
         SseEmitter emitter = new SseEmitter(120_000L);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
         executorService.scheduleAtFixedRate(() -> {
             try {
-                emitter.send(SseEmitter.event().data(message));
+                emitter.send(SseEmitter.event().data(systemInfoService.getSystemInfo().toString()));
             } catch (IOException e) {
                 emitter.completeWithError(e);
                 executorService.shutdown();
