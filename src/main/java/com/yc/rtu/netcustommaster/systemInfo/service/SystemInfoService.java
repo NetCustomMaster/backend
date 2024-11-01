@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
@@ -46,6 +47,9 @@ public class SystemInfoService {
     private List<String> getConnectedDevices() {
         String command = "arp -a"; // ARP 명령어
         String output = executeCommand(command);
-        return Arrays.asList(output.split("\n")); // 결과를 리스트로 변환
+        return Arrays.stream(output.split("\n")) // 줄 바꿈 기준으로 나누기
+                .map(String::trim) // 각 줄의 공백 제거
+                .filter(line -> !line.isEmpty()) // 빈 줄 필터링
+                .collect(Collectors.toList()); // 리스트로 수집
     }
 }
