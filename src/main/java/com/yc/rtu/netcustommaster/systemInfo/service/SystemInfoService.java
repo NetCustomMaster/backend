@@ -38,7 +38,7 @@ public class SystemInfoService {
     }
 
     private String getInternetSpeed() {
-        String command = "speedtest-cli --simple | grep 'Download\\|Upload'";
+        String command = "speedtest-cli --server 50686 --simple | grep 'Ping\\|Download\\|Upload'";
         return executeCommand(command);
     }
 
