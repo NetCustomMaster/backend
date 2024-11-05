@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.solve.service;
 
 import com.cohere.api.requests.ChatRequest;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.cohere.api.Cohere;
@@ -16,10 +17,15 @@ public class AIService {
     private String apiKey;
 
     private final List<Message> chatHistory = new ArrayList<>();
-    Cohere cohere = Cohere.builder()
-            .token(apiKey)
-            .clientName("snippet")
-            .build();
+    private Cohere cohere;
+
+    @PostConstruct
+    public void init() {
+        cohere = Cohere.builder()
+                .token(apiKey)
+                .clientName("snippet")
+                .build();
+    }
 
     public String getChatResponse(String userMessage) {
         NonStreamedChatResponse response = cohere.chat(
