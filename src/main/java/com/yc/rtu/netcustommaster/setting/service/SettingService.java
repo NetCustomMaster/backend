@@ -31,6 +31,7 @@ public class SettingService {
         authService.saveConfig(config);
         return true;
     }
+    //와이파이 채널변경
     public String changeWifiChannel(String channel,String path){
         String command = String.format(
                 "cd /etc/hostapd && sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
@@ -41,6 +42,7 @@ public class SettingService {
         String result = executeCommand(command);
         return result.isEmpty() ? "Wifi 채널 변경 성공" : result;
     }
+    //와이파이 대역폭변경
     public String changeWifiBand(String path,String hwMode,String channel){
         String command = String.format(
                 "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +

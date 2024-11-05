@@ -6,7 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 
 @RestController
 @RequestMapping("/api/v1/setting")
@@ -39,6 +44,29 @@ public class SettingController {
     public String reset(){
         settingService.Reset();
         return "사용자 정보 리셋 완료";
+    }
+    @GetMapping("/wifipassword")
+    public String getWifiConfig() {
+        Properties properties = new Properties();
+        String ssid = "";
+        String maskedPassword = "";
+
+        try (FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")) {
+            properties.load(fis);
+
+            // SSID와 비밀번호 가져오기
+            ssid = properties.getProperty("ssid");
+            String password = properties.getProperty("wpa_passphrase");
+
+            // 비밀번호를 *로 나타냄
+            if (password != null) {
+                maskedPassword = "*".repeat(password.length());
+            }
+        } catch (IOException e) {
+            return "오류 발생: " + e.getMessage();
+        }
+
+        return "현재 SSID: " + ssid + "\n비밀번호: " + maskedPassword;
     }
     //관리자 아이디 비밀번호 변경
     @PatchMapping("/changeauth")
