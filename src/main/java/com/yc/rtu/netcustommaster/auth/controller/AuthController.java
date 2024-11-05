@@ -1,5 +1,5 @@
-package com.yc.rtu.netcustommaster.controller;
-import com.yc.rtu.netcustommaster.service.AuthService;
+package com.yc.rtu.netcustommaster.auth.controller;
+import com.yc.rtu.netcustommaster.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
