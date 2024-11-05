@@ -4,10 +4,6 @@ import com.yc.rtu.netcustommaster.systemInfo.dto.response.SpeedTestCliResponseDt
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
 @Service
@@ -21,7 +17,6 @@ public class SystemInfoService {
     }
 
     public SpeedTestCliResponseDto getSpeedTestCli() {
-        SpeedTestCliResponseDto speedTestCli = new SpeedTestCliResponseDto();
         String result = getInternetSpeed();
         SpeedTestCliResponseDto dto = new SpeedTestCliResponseDto();
         String[] lines = result.split("\n");
