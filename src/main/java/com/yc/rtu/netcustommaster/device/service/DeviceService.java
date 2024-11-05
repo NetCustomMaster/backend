@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.device.service;
 
 import com.yc.rtu.netcustommaster.device.dto.response.DeviceResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
+@Slf4j
 @Service
 public class DeviceService {
 
@@ -35,6 +37,7 @@ public class DeviceService {
         }
 
         responseDto.setTrafficInfos(trafficInfos);
+        log.info("responseDto : {}", responseDto);
         return responseDto; // DTO 반환
     }
 }
