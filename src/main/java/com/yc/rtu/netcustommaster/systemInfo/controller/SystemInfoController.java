@@ -26,6 +26,6 @@ public class SystemInfoController {
 
     @GetMapping("/speed")
     public ResponseEntity<SpeedTestCliResponseDto> speedTestCli() {
-        return ResponseEntity.ok(systemInfoService.getSpeedTestCli());
+        return ResponseEntity.ok().body(systemInfoService.getSpeedTestCli());
     }
 }
