@@ -17,6 +17,14 @@ public class SettingService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private AuthService authService;
+
+    public void Reset(){
+        Properties config=authService.loadConfig();
+        config.setProperty("admin.password","");
+        config.setProperty("admin.username","");
+        config.setProperty("first_time","false");
+        authService.saveConfig(config);
+    }
     //관리자 비밀번호 변경
     public boolean changeUserAuth(String username,String password){
         Properties config = authService.loadConfig();

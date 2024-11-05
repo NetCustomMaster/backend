@@ -35,7 +35,11 @@ public class SettingController {
         System.out.println("PATCH 요청 수신됨: " + request);
         return settingService.changeWifiBand(path,hwMode,channel);
     }
-
+    @GetMapping("/reset")
+    public String reset(){
+        settingService.Reset();
+        return "사용자 정보 리셋 완료";
+    }
     //관리자 아이디 비밀번호 변경
     @PatchMapping("/changeauth")
     public String handleChangePassword(@RequestBody Map<String, String> request) {
