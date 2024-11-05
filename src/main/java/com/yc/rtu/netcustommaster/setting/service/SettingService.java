@@ -13,16 +13,33 @@ import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
 @Service
 public class SettingService {
-    //비밀번호 보안 강화를 위한 암호화 도구 사용
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private AuthService authService;
+
+    public void Reset(){
+        Properties config=authService.loadConfig();
+        config.setProperty("admin.password","");
+        config.setProperty("admin.username","");
+        config.setProperty("first_time","true");
+        authService.saveConfig(config);
+    }
     //관리자 비밀번호 변경
-    public boolean changePassword(String password){
+    public boolean changeUserAuth(String username,String password){
         Properties config = authService.loadConfig();
-        config.setProperty("admin.password", passwordEncoder.encode(password));
+        config.setProperty("admin.username", username);
+        config.setProperty("admin.password", password);
         authService.saveConfig(config);
         return true;
+    }
+    public String changeWifiChannel(String channel,String path){
+        String command = String.format(
+                "cd /etc/hostapd && sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
+                        "sudo systemctl restart hostapd",
+                channel,path
+        );
+        System.out.println(command);
+        String result = executeCommand(command);
+        return result.isEmpty() ? "Wifi 채널 변경 성공" : result;
     }
     public String changeWifiBand(String path,String hwMode,String channel){
         String command = String.format(
