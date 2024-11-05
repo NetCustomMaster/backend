@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String registerpage(){
+    public String register(){
         return "회원가입페이지";
     }
 
@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginpage(){
+    public String login(){
         return "로그인페이지";
     }
 
