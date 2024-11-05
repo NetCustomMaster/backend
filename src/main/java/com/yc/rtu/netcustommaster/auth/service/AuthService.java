@@ -38,7 +38,7 @@ public class AuthService {
     }
 
     // 관리자 및 Wi-Fi 정보 설정
-    public void setAdminCredentials(String username, String password) {
+    public void setAdminCredentials(String username, String password,String passwordcheck) {
         Properties config = loadConfig();
         config.setProperty("admin.username", username);
         //비밀번호는 암호화해 저장

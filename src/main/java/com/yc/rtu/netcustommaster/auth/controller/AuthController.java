@@ -33,10 +33,16 @@ public class AuthController {
     //처음 사용하는 사용자 회원가입
     @PostMapping("/register")
     public String register(@RequestBody Map<String, String> request) {
-               String adminUsername = request.get("username");
-               String adminPassword = request.get("password");
-               authService.setAdminCredentials(adminUsername, adminPassword);
-               return "회원가입 완료";
+               String username = request.get("username");
+               String password = request.get("password");
+               String passwordcheck=request.get("passwordcheck");
+               if(passwordcheck.equals(password)){
+                   authService.setAdminCredentials(username,password,passwordcheck);
+                   return "회원가입 완료";
+               }else{
+                   return "비밀번호 확인 틀림";
+               }
+
     }
 
     @GetMapping("/login")
