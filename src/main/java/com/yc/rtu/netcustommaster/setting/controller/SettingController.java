@@ -36,16 +36,15 @@ public class SettingController {
         return settingService.changeWifiBand(path,hwMode,channel);
     }
 
-    //관리자 비밀번호 변경
-    @PatchMapping("/password")
+    //관리자 아이디 비밀번호 변경
+    @PatchMapping("/changeauth")
     public String handleChangePassword(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
+        String newusername=request.get("newusername");
         String newpassword = request.get("newpassword");
-        if (authService.authenticate(username, password) && settingService.changePassword(newpassword)) {
-            return "비밀번호 변경 성공";
+        if (settingService.changeUserAuth(newusername,newpassword)) {
+            return "관리자 정보 변경 성공";
         } else {
-            return "비밀번호 변경 실패";
+            return "관리자 정보 변경 실패";
         }
     }
 
@@ -56,6 +55,17 @@ public class SettingController {
         try{
             return settingService.changeWifiPassword(ssid,newPassword,path);
         }catch (Exception e) {
+            e.printStackTrace();
+            return "오류 발생: " + e.getMessage();
+        }
+    }
+
+    @PatchMapping("/channel")
+    public String changeChannel(@RequestBody Map<String, String> request) {
+        String channel = request.get("channel");
+        try{
+            return settingService.changeWifiChannel(channel,path);
+        }catch(Exception e){
             e.printStackTrace();
             return "오류 발생: " + e.getMessage();
         }
