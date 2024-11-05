@@ -1,8 +1,10 @@
 package com.yc.rtu.netcustommaster.systemInfo.controller;
 
+import com.yc.rtu.netcustommaster.systemInfo.dto.response.SpeedTestCliResponseDto;
 import com.yc.rtu.netcustommaster.systemInfo.service.SystemInfoService;
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,23 +24,24 @@ public class SystemInfoController {
 
     @GetMapping("/resource")
     public SseEmitter streamSystemInfo() {
-        SseEmitter emitter = new SseEmitter();
+        return createSystemInfoEmitter();
+    }
+
+    @GetMapping("/speed")
+    public ResponseEntity<SpeedTestCliResponseDto> speedTestCli() {
+        return ResponseEntity.ok(systemInfoService.getSpeedTestCli());
+    }
+
+    private SseEmitter createSystemInfoEmitter() {
+        SseEmitter emitter = new SseEmitter(120_000L);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
         executorService.scheduleAtFixedRate(() -> {
             try {
-                SystemInfoResponseDto systemInfo = systemInfoService.getSystemInfo();
-
-                String message = String.format(
-                        "{ \"cpuUsage\": \"%s\", \"memoryUsage\": \"%s\", \"internetSpeed\": \"%s\", \"connectedDevices\": %s }",
-                        systemInfo.getCpuUsage(), systemInfo.getMemoryUsage(), systemInfo.getInternetSpeed(),
-                        systemInfo.getConnectedDevices()
-                );
-
-                emitter.send(SseEmitter.event().data(message));
-
+                emitter.send(SseEmitter.event().data(systemInfoService.getSystemInfo().toJson()));
             } catch (IOException e) {
                 emitter.completeWithError(e);
+                executorService.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS); // 1초마다 데이터 전송
 
