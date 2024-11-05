@@ -2,7 +2,6 @@ package com.yc.rtu.netcustommaster.systemInfo.controller;
 
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SpeedTestCliResponseDto;
 import com.yc.rtu.netcustommaster.systemInfo.service.SystemInfoService;
-import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +25,6 @@ public class SystemInfoController {
 
     @GetMapping("/speed")
     public ResponseEntity<SpeedTestCliResponseDto> speedTestCli() {
-        return ResponseEntity.ok(systemInfoService.getSpeedTestCli());
+        return ResponseEntity.ok().body(systemInfoService.getSpeedTestCli());
     }
 }
