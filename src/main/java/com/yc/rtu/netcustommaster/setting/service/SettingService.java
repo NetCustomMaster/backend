@@ -38,7 +38,7 @@ public class SettingService {
     //와이파이 비밀번호 변경
     public String changeWifiPassword(String password,String path){
         String command = String.format(
-                "cd /etc/hostapd && sed -i 's/^wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
+                "cd /etc/hostapd && sed -i 's/wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
                 password, path
         );
         System.out.println(command);
