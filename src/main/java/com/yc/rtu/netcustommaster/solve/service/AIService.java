@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.solve.service;
 
 import com.cohere.api.requests.ChatRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.cohere.api.Cohere;
 import com.cohere.api.types.*;
@@ -10,9 +11,13 @@ import java.util.List;
 
 @Service
 public class AIService {
+
+    @Value("${api.key}")
+    private String apiKey;
+
     private final List<Message> chatHistory = new ArrayList<>();
     Cohere cohere = Cohere.builder()
-            .token("<API KEY>")
+            .token(apiKey)
             .clientName("snippet")
             .build();
 
