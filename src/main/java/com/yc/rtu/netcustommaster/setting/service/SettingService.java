@@ -2,6 +2,7 @@ package com.yc.rtu.netcustommaster.setting.service;
 
 import com.yc.rtu.netcustommaster.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +26,23 @@ public class SettingService {
     }
     public String changeWifiBand(String path,String hwMode,String channel){
         String command = String.format(
-                "sudo sed -i 's/hw_mode=.*/hw_mode=%s/g' %s && " +
-                        "sudo sed -i 's/channel=[0-9]*$/channel=%s/g' %s && "+
+                "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +
+                        "sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
                         "sudo systemctl restart hostapd",
-                hwMode, path, channel, path
+                hwMode,path,channel,path
         );
-        return executeCommand(command);
+        System.out.println(command);
+        String result = executeCommand(command);
+        return result.isEmpty() ? "Wifi 대역폭 변경 성공" : result;
     }
     //와이파이 비밀번호 변경
     public String changeWifiPassword(String password,String path){
         String command = String.format(
-                "sudo sed -i 's/^wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
+                "cd /etc/hostapd && sed -i 's/^wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
                 password, path
         );
-        return executeCommand(command);
+        System.out.println(command);
+        String result = executeCommand(command);
+        return result.isEmpty() ? "Wifi 비밀번호 변경 성공" : result;
     }
 }

@@ -15,7 +15,7 @@ public class SettingController {
     private AuthService authService;
     @Autowired
     private SettingService settingService;
-    final String path = "/etc/hostapd/hostapd.conf";
+    final String path = "hostapd.conf";
     //Wifi 대역폭 설정
     @PatchMapping("/band")
     public String updateWifiBand(@RequestBody Map<String, String> request) {
@@ -33,9 +33,7 @@ public class SettingController {
         }
         // hostapd.conf 파일 수정 명령어를 실행하도록 하여 구현
         System.out.println("PATCH 요청 수신됨: " + request);
-        settingService.changeWifiBand(path,hwMode,channel);
-        return "Wi-Fi 주파수 대역이 성공적으로 업데이트되었습니다.";
-
+        return settingService.changeWifiBand(path,hwMode,channel);
     }
 
     //관리자 비밀번호 변경
@@ -56,11 +54,10 @@ public class SettingController {
         String newPassword = request.get("newpassword");
         // 비밀번호 변경 시도
         try{
-            settingService.changeWifiPassword(newPassword,path);
+            return settingService.changeWifiPassword(newPassword,path);
         }catch (Exception e) {
             e.printStackTrace();
             return "오류 발생: " + e.getMessage();
         }
-        return "와이파이 비밀번호 변경 성공";
     }
 }
