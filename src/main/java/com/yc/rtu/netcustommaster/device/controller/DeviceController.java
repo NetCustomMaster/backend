@@ -17,6 +17,6 @@ public class DeviceController {
 
     @GetMapping
     public SseEmitter streamTrafficData() {
-        return createEmitterWithMessageProvider(deviceService::getTrafficData);
+        return createEmitterWithMessageProvider(()-> deviceService.getTrafficData().toJson());
     }
 }
