@@ -36,13 +36,13 @@ public class SettingService {
         return result.isEmpty() ? "Wifi 대역폭 변경 성공" : result;
     }
     //와이파이 비밀번호 변경
-    public String changeWifiPassword(String password,String path){
+    public String changeWifiPassword(String ssid,String password,String path){
         String command = String.format(
-                "cd /etc/hostapd && sudo sed -i 's/wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
-                password, path
+                "cd /etc/hostapd && sudo sed -i 's/ssid=.*/ssid=%s/' %s && sudo sed -i 's/wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
+                ssid,path,password, path
         );
         System.out.println(command);
         String result = executeCommand(command);
-        return result.isEmpty() ? "Wifi 비밀번호 변경 성공" : result;
+        return result.isEmpty() ? "Wifi 설정 변경 성공" : result;
     }
 }

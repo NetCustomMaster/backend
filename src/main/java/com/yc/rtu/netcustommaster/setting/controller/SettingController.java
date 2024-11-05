@@ -51,10 +51,10 @@ public class SettingController {
 
     @PatchMapping("/wifipassword")
     public String changePassword(@RequestBody Map<String,String> request) {
+        String ssid=request.get("ssid");
         String newPassword = request.get("newpassword");
-        // 비밀번호 변경 시도
         try{
-            return settingService.changeWifiPassword(newPassword,path);
+            return settingService.changeWifiPassword(ssid,newPassword,path);
         }catch (Exception e) {
             e.printStackTrace();
             return "오류 발생: " + e.getMessage();
