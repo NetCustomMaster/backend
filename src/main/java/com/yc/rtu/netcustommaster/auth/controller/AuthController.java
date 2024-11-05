@@ -18,10 +18,10 @@ public class AuthController {
         //config.properties 파일을 통하여 첫 사용인지 체크함
         //첫 사용이면 회원가입 페이지로 넘어가게해야함
         if(authService.isFirstTime()){
-            return "회원가입";
+            return "회원가입페이지";
         }//첫 사용이 아니면 로그인 진행
         else{
-            return "로그인";
+            return "로그인페이지";
         }
     }
 

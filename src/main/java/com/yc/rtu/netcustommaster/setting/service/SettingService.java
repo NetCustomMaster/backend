@@ -27,8 +27,7 @@ public class SettingService {
     }
     public String changeWifiChannel(String channel,String path){
         String command = String.format(
-                "cd /etc/hostapd && " +
-                        "sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
+                "cd /etc/hostapd && sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
                         "sudo systemctl restart hostapd",
                 channel,path
         );
