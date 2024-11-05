@@ -16,7 +16,7 @@ import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 public class DeviceService {
 
     public DeviceResponseDto getTrafficData() {
-        String command = "sudo iftop -i wlan0 -t -s 1"; // 1초 동안의 트래픽 모니터링
+        String command = "sudo iftop -i eth0 -t -s 1"; // 1초 동안의 트래픽 모니터링
         String output = executeCommand(command);
         return extractIPAndTraffic(output);
     }
@@ -25,14 +25,22 @@ public class DeviceService {
         DeviceResponseDto responseDto = new DeviceResponseDto();
         List<DeviceResponseDto.TrafficInfo> trafficInfos = new ArrayList<>();
 
-        // 정규 표현식: IP 주소와 last 2s 값을 추출
-        Pattern pattern = Pattern.compile("(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s+=>\\s+(\\S+)");
+        // 송신 및 수신 트래픽을 모두 추출하기 위한 정규 표현식
+        Pattern pattern = Pattern.compile("(\\d+\\.\\d+\\.\\d+\\.\\d+)\\s+(<=|=>)\\s+(\\S+)");
         Matcher matcher = pattern.matcher(output);
 
         while (matcher.find()) {
             DeviceResponseDto.TrafficInfo trafficInfo = new DeviceResponseDto.TrafficInfo();
             trafficInfo.setIpAddress(matcher.group(1));
-            trafficInfo.setLast2sTraffic(matcher.group(2));
+            trafficInfo.setLast2sTraffic(matcher.group(3)); // 트래픽 값 설정
+
+            // 송신 또는 수신에 따라 방향 설정
+            if ("=>".equals(matcher.group(2))) {
+                trafficInfo.setDirection("sent");
+            } else {
+                trafficInfo.setDirection("received");
+            }
+
             trafficInfos.add(trafficInfo);
         }
 
