@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -46,27 +48,21 @@ public class SettingController {
         return "사용자 정보 리셋 완료";
     }
     @GetMapping("/wifipassword")
-    public String getWifiConfig() {
+    public Object getWifiConfig() {
         Properties properties = new Properties();
+        List<String> info=new ArrayList<>();
         String ssid = "";
-        String maskedPassword = "";
-
+        String password="";
         try (FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")) {
             properties.load(fis);
-
             // SSID와 비밀번호 가져오기
             ssid = properties.getProperty("ssid");
-            String password = properties.getProperty("wpa_passphrase");
-
-            // 비밀번호를 *로 나타냄
-            if (password != null) {
-                maskedPassword = "*".repeat(password.length());
-            }
+            password= properties.getProperty("wpa_passphrase");
         } catch (IOException e) {
             return "오류 발생: " + e.getMessage();
         }
-
-        return "현재 SSID: " + ssid + "\n비밀번호: " + maskedPassword;
+        info.add(ssid); info.add(password);
+        return info;
     }
     //관리자 아이디 비밀번호 변경
     @PatchMapping("/changeauth")
@@ -79,7 +75,23 @@ public class SettingController {
             return "관리자 정보 변경 실패";
         }
     }
-
+    //관리자 비밀번호 변경
+    @PostMapping("/changepassword")
+    public String changeAuthPassword(@RequestBody Map<String, String> request) {
+        String password=request.get("password");
+        String newpassword=request.get("newpassword");
+        String newpasswordcheck=request.get("newpasswordcheck");
+        if(authService.authenticate(password)){
+            if(newpassword.equals(newpasswordcheck)){
+                authService.setAdminPassword(newpassword);
+                return "비밀번호 변경 완료";
+            }else {
+                return "비밀번호 확인 틀림";
+            }
+        }else{
+            return "비밀번호 틀림";
+        }
+    }
     @PatchMapping("/wifipassword")
     public String changePassword(@RequestBody Map<String,String> request) {
         String ssid=request.get("ssid");
