@@ -11,7 +11,7 @@ public class AuthService {
 
     //비밀번호 보안 강화를 위한 암호화 도구 사용
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final String CONFIG_PATH = "backend\\src\\main\\java\\com\\yc\\rtu\\netcustommaster\\properties\\config.properties"; // 설정 파일 경로
+    private final String CONFIG_PATH = "backend\\src\\main\\resources\\config.properties"; // 설정 파일 경로
     // 설정 파일 읽기
     public Properties loadConfig() {
         Properties config = new Properties();

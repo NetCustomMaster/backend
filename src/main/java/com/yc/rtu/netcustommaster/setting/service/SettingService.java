@@ -13,8 +13,6 @@ import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
 @Service
 public class SettingService {
-    //비밀번호 보안 강화를 위한 암호화 도구 사용
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private AuthService authService;
 
