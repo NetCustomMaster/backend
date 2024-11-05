@@ -2,10 +2,12 @@ package com.yc.rtu.netcustommaster.systemInfo.service;
 
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SpeedTestCliResponseDto;
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
+@Slf4j
 @Service
 public class SystemInfoService {
 
@@ -30,6 +32,7 @@ public class SystemInfoService {
                 dto.setUpload(line.split(": ")[1]);
             }
         }
+        log.info("dto : {}", dto);
         return dto;
     }
 
