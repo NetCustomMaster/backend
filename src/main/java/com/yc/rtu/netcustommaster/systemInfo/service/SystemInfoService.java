@@ -17,7 +17,6 @@ public class SystemInfoService {
         SystemInfoResponseDto systemInfo = new SystemInfoResponseDto();
         systemInfo.setCpuUsage(getCpuUsage());
         systemInfo.setMemoryUsage(getMemoryUsage());
-        systemInfo.setConnectedDevices(getConnectedDevices());
         return systemInfo;
     }
 
