@@ -17,6 +17,7 @@ public class DeviceResponseDto {
     public static class TrafficInfo {
         private String ipAddress;
         private String last2sTraffic;
+        private String direction; // 송신 또는 수신 방향 추가
     }
 
     public String toJson() {
