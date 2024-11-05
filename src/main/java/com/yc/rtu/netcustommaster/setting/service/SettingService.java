@@ -22,7 +22,7 @@ public class SettingService {
         Properties config=authService.loadConfig();
         config.setProperty("admin.password","");
         config.setProperty("admin.username","");
-        config.setProperty("first_time","false");
+        config.setProperty("first_time","true");
         authService.saveConfig(config);
     }
     //관리자 비밀번호 변경
