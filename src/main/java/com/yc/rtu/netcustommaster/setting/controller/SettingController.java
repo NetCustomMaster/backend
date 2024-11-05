@@ -47,7 +47,6 @@ public class SettingController {
         settingService.Reset();
         return "사용자 정보 리셋 완료";
     }
-    //와이파이 ssid,비밀번호 GET
     @GetMapping("/wifipassword")
     public Object getWifiConfig() {
         Properties properties = new Properties();
