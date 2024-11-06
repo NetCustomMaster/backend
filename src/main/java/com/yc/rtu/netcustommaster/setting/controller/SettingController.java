@@ -24,8 +24,8 @@ public class SettingController {
     @PatchMapping("/band")
     public String updateWifiBand(@RequestBody Map<String, String> request) {
         String band = request.get("band");
-        String hwMode = "g";
-        String channel = "6";
+        String hwMode = "";
+        String channel = "";
         if (band.equals("2")) {
             hwMode = "g";
             channel = "6";
