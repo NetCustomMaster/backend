@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
-@Slf4j
 @Service
 public class DeviceService {
 
@@ -45,7 +44,6 @@ public class DeviceService {
         }
 
         responseDto.setTrafficInfos(trafficInfos);
-        log.info("responseDto : {}", responseDto);
         return responseDto; // DTO 반환
     }
 }
