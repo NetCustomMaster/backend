@@ -6,7 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 @RestController
 @RequestMapping("/api/v1/setting")
@@ -40,6 +47,23 @@ public class SettingController {
         settingService.Reset();
         return "사용자 정보 리셋 완료";
     }
+    @GetMapping("/wifipassword")
+    public Object getWifiConfig() {
+        Properties properties = new Properties();
+        List<String> info=new ArrayList<>();
+        String ssid = "";
+        String password="";
+        try (FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")) {
+            properties.load(fis);
+            // SSID와 비밀번호 가져오기
+            ssid = properties.getProperty("ssid");
+            password= properties.getProperty("wpa_passphrase");
+        } catch (IOException e) {
+            return "오류 발생: " + e.getMessage();
+        }
+        info.add(ssid); info.add(password);
+        return info;
+    }
     //관리자 아이디 비밀번호 변경
     @PatchMapping("/changeauth")
     public String handleChangePassword(@RequestBody Map<String, String> request) {
@@ -51,7 +75,24 @@ public class SettingController {
             return "관리자 정보 변경 실패";
         }
     }
-
+    //관리자 비밀번호 변경
+    @PostMapping("/changepassword")
+    public String changeAuthPassword(@RequestBody Map<String, String> request) {
+        String password=request.get("password");
+        String newpassword=request.get("newpassword");
+        String newpasswordcheck=request.get("newpasswordcheck");
+        if(authService.authenticate(password)){
+            if(newpassword.equals(newpasswordcheck)){
+                authService.setAdminPassword(newpassword);
+                return "비밀번호 변경 완료";
+            }else {
+                return "비밀번호 확인 틀림";
+            }
+        }else{
+            return "비밀번호 틀림";
+        }
+    }
+    //와이파이 정보 변경
     @PatchMapping("/wifipassword")
     public String changePassword(@RequestBody Map<String,String> request) {
         String ssid=request.get("ssid");

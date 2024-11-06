@@ -38,7 +38,7 @@ public class AuthService {
     }
 
     // 관리자 및 Wi-Fi 정보 설정
-    public void setAdminCredentials(String username, String password) {
+    public void setAdminCredentials(String username, String password,String passwordcheck) {
         Properties config = loadConfig();
         config.setProperty("admin.username", username);
         //비밀번호는 암호화해 저장
@@ -46,12 +46,22 @@ public class AuthService {
         config.setProperty("first_time", "false"); // 처음 사용 여부 플래그 업데이트
         saveConfig(config);
     }
-
+    // 관리자 비밀번호 변경
+    public void setAdminPassword(String newpassword){
+        Properties config=loadConfig();
+        config.setProperty("admin.password", newpassword);
+        saveConfig(config);
+    }
     // 관리자 아이디 비밀번호 검증
     public boolean authenticate(String username, String password) {
         Properties config = loadConfig();
         String storedUsername = config.getProperty("admin.username");
         String storedPassword = config.getProperty("admin.password");
         return storedUsername.equals(username) && storedPassword.equals(password);
+    }
+    public boolean authenticate(String password) {
+        Properties config = loadConfig();
+        String storedPassword = config.getProperty("admin.password");
+        return storedPassword.equals(password);
     }
 }
