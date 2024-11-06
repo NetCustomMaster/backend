@@ -15,6 +15,7 @@ build/
 .settings
 .springBeans
 .sts4-cache
+
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
@@ -24,6 +25,7 @@ bin/
 *.iws
 *.iml
 *.ipr
+*.properties
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
