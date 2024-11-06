@@ -22,18 +22,19 @@ public class SettingController {
     final String path = "hostapd.conf";
     //Wifi 대역폭 설정
     @PatchMapping("/band")
-    public ResponseEntity<SettingResponseDto> updateWifiBand(@RequestBody Map<String, String> request) {
+    public String updateWifiBand(@RequestBody Map<String, String> request) {
         String band = request.get("band");
         String hwMode = "g";
         String channel = "6";
-        if ("2".equals(band)) {
+        if (band.equals("2")) {
             hwMode = "g";
             channel = "6";
-        } else if ("5".equals(band)) {
+        } else if (band.equals("5")) {
             hwMode = "a";
             channel = "36";
         }
-        return ResponseEntity.ok(settingService.changeWifiBand(path,hwMode,channel));
+        String message=settingService.changeWifiBand(path,hwMode,channel).getMessage();
+        return message;
     }
 
     @GetMapping("/reset")

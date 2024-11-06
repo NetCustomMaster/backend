@@ -125,9 +125,7 @@ public class SettingService {
     public SettingResponseDto changeWifiBand(String path,String hwMode,String channel){
         SettingResponseDto response=new SettingResponseDto();
         String command = String.format(
-                "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +
-                        "sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
-                        "sudo systemctl restart hostapd",
+                "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && sudo systemctl restart hostapd",
                 hwMode,path,channel,path
         );
         System.out.println(command);

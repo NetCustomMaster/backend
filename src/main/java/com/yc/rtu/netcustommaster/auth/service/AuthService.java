@@ -10,7 +10,7 @@ import java.util.Properties;
 public class AuthService {
 
 
-    private final String CONFIG_PATH = "./backend/src/main/resources/config.properties"; // 설정 파일 경로
+    private final String CONFIG_PATH = "/home/hojin/backend/src/main/resources/config.properties"; // 설정 파일 경로
     // 설정 파일 읽기
     public Properties loadConfig() {
         Properties config = new Properties();
