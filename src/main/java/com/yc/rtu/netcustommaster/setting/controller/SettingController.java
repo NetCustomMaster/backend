@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.setting.controller;
 
 import com.yc.rtu.netcustommaster.auth.service.AuthService;
+import com.yc.rtu.netcustommaster.setting.response.WifiSettingResponseDto;
 import com.yc.rtu.netcustommaster.setting.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,16 +75,18 @@ public class SettingController {
         String password=request.get("password");
         String newpassword=request.get("newpassword");
         String newpasswordcheck=request.get("newpasswordcheck");
+        WifiSettingResponseDto wifiResponse=new WifiSettingResponseDto();
         if(authService.authenticate(password)){
             if(newpassword.equals(newpasswordcheck)){
                 authService.setAdminPassword(newpassword);
-                return "변경 완료";
+                wifiResponse.setMessage("변경 완료");
             }else {
-                return "비밀번호 확인이 맞지 않습니다.";
+                wifiResponse.setMessage("비밀번호 확인이 맞지 않습니다.");
             }
         }else{
-            return "비밀번호가 틀렸습니다.";
+            wifiResponse.setMessage("비밀번호가 틀렸습니다.");
         }
+        return wifiResponse.getMessage();
     }
     //와이파이 정보 변경
     @PatchMapping("/wifipassword")
