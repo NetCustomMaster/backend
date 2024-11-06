@@ -122,7 +122,7 @@ public class SettingService {
         return wifiInfo;
     }
     //와이파이 대역폭변경
-    public SettingResponseDto changeWifiBand(String path,String hwMode,String channel){
+    public String changeWifiBand(String path,String hwMode,String channel){
         SettingResponseDto response=new SettingResponseDto();
         String command = String.format(
                 "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && sudo systemctl restart hostapd",
@@ -134,7 +134,7 @@ public class SettingService {
         }catch(Exception e){
             response.setMessage("Wifi 대역폭 변경 실패");
         }
-        return response;
+        return response.getMessage();
     }
     //와이파이 비밀번호 변경
     public String changeWifiPassword(String ssid,String password,String path){

@@ -33,8 +33,8 @@ public class SettingController {
             hwMode = "a";
             channel = "36";
         }
-        String message=settingService.changeWifiBand(path,hwMode,channel).getMessage();
-        return message;
+
+        return settingService.changeWifiBand(path,hwMode,channel);
     }
 
     @GetMapping("/reset")
