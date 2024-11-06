@@ -1,18 +1,15 @@
 package com.yc.rtu.netcustommaster.setting.service;
 
 import com.yc.rtu.netcustommaster.auth.service.AuthService;
+import com.yc.rtu.netcustommaster.setting.response.SettingResponseDto;
 import com.yc.rtu.netcustommaster.setting.response.WifiInfoResponseDto;
-import com.yc.rtu.netcustommaster.systemInfo.dto.response.SystemInfoResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Properties;
 
 import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
@@ -30,12 +27,18 @@ public class SettingService {
         authService.saveConfig(config);
     }
     //관리자 비밀번호 변경
-    public boolean changeUserAuth(String username,String password){
+    public String changeUserAuth(String username,String password){
+        SettingResponseDto settingResponse=new SettingResponseDto();
         Properties config = authService.loadConfig();
         config.setProperty("admin.username", username);
         config.setProperty("admin.password", password);
-        authService.saveConfig(config);
-        return true;
+        try{
+            authService.saveConfig(config);
+            settingResponse.setMessage("비밀번호 변경 성공");
+        } catch (Exception e) {
+            settingResponse.setMessage("비밀번호 변경 실패");
+        }
+        return settingResponse.getMessage();
     }
     //와이파이 채널변경
     public boolean changeWifiChannel(String channel,String path){
@@ -90,7 +93,7 @@ public class SettingService {
         }
         return channel;
     }
-    //현재 와이파이 채널 확인
+    //현재 와이파이 비밀번호 확인
     public String getWifipassword(){
         Properties properties=new Properties();
         String wifipassword="";
@@ -113,6 +116,7 @@ public class SettingService {
     }
     //와이파이 대역폭변경
     public String changeWifiBand(String path,String hwMode,String channel){
+        SettingResponseDto response=new SettingResponseDto();
         String command = String.format(
                 "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +
                         "sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
@@ -120,17 +124,26 @@ public class SettingService {
                 hwMode,path,channel,path
         );
         System.out.println(command);
-        String result = executeCommand(command);
-        return result.isEmpty() ? "Wifi 대역폭 변경 성공" : result;
+        try{
+            response.setMessage("Wifi 대역폭 변경 성공");
+        }catch(Exception e){
+            response.setMessage("Wifi 대역폭 변경 실패");
+        }
+        return response.getMessage();
     }
     //와이파이 비밀번호 변경
-    public boolean changeWifiPassword(String ssid,String password,String path){
+    public String changeWifiPassword(String ssid,String password,String path){
+        SettingResponseDto response=new SettingResponseDto();
         String command = String.format(
                 "cd /etc/hostapd && sudo sed -i 's/ssid=.*/ssid=%s/' %s && sudo sed -i 's/wpa_passphrase=.*/wpa_passphrase=%s/' %s && sudo systemctl restart hostapd",
                 ssid,path,password, path
         );
-        System.out.println(command);
-        executeCommand(command);
-        return true;
+        try{
+            executeCommand(command);
+            response.setMessage("와이파이 비밀번호 변경 성공");
+        } catch (Exception e) {
+            response.setMessage("와이파이 비밀번호 변경 실패");
+        }
+        return response.getMessage();
     }
 }

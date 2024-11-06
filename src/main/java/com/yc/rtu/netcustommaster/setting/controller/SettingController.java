@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.setting.controller;
 
 import com.yc.rtu.netcustommaster.auth.service.AuthService;
+import com.yc.rtu.netcustommaster.setting.response.SettingResponseDto;
 import com.yc.rtu.netcustommaster.setting.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ public class SettingController {
         }
         return settingService.changeWifiBand(path,hwMode,channel);
     }
+
     @GetMapping("/reset")
     public String reset(){
         settingService.Reset();
@@ -63,7 +65,7 @@ public class SettingController {
 
     //관리자 아이디 비밀번호 변경
     @PatchMapping("/changeauth")
-    public boolean handleChangePassword(@RequestBody Map<String, String> request) {
+    public String handleChangePassword(@RequestBody Map<String, String> request) {
         String newusername=request.get("newusername");
         String newpassword = request.get("newpassword");
         return settingService.changeUserAuth(newusername,newpassword);
@@ -74,29 +76,25 @@ public class SettingController {
         String password=request.get("password");
         String newpassword=request.get("newpassword");
         String newpasswordcheck=request.get("newpasswordcheck");
+        SettingResponseDto response=new SettingResponseDto();
         if(authService.authenticate(password)){
             if(newpassword.equals(newpasswordcheck)){
                 authService.setAdminPassword(newpassword);
-                return "변경 완료";
+                response.setMessage("변경 완료");
             }else {
-                return "비밀번호 확인이 맞지 않습니다.";
+                response.setMessage("비밀번호 확인이 맞지 않습니다.");
             }
         }else{
-            return "비밀번호가 틀렸습니다.";
+            response.setMessage("비밀번호가 틀렸습니다.");
         }
+        return response.getMessage();
     }
     //와이파이 정보 변경
     @PatchMapping("/wifipassword")
-    public boolean changePassword(@RequestBody Map<String,String> request) {
-        boolean done=false;
+    public String changePassword(@RequestBody Map<String,String> request) {
         String ssid=request.get("ssid");
         String newPassword = request.get("newpassword");
-        try{
-            return settingService.changeWifiPassword(ssid,newPassword,path);
-        }catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        return settingService.changeWifiPassword(ssid,newPassword,path);
     }
 
     @PatchMapping("/channel")
