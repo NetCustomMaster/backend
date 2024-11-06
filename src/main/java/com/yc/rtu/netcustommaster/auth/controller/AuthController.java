@@ -42,7 +42,6 @@ public class AuthController {
                }else{
                    return "비밀번호 확인 틀림";
                }
-
     }
 
     @GetMapping("/login")

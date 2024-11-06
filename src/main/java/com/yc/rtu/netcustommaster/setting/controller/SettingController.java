@@ -38,8 +38,6 @@ public class SettingController {
             hwMode = "a";
             channel = "36";
         }
-        // hostapd.conf 파일 수정 명령어를 실행하도록 하여 구현
-        System.out.println("PATCH 요청 수신됨: " + request);
         return settingService.changeWifiBand(path,hwMode,channel);
     }
     @GetMapping("/reset")
@@ -47,33 +45,28 @@ public class SettingController {
         settingService.Reset();
         return "사용자 정보 리셋 완료";
     }
+
+    @GetMapping("/band")
+    public String band(){
+        String band="";
+        band=settingService.getBand();
+        return band;
+    }
+
     @GetMapping("/wifipassword")
     public Object getWifiConfig() {
-        Properties properties = new Properties();
         List<String> info=new ArrayList<>();
-        String ssid = "";
-        String password="";
-        try (FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")) {
-            properties.load(fis);
-            // SSID와 비밀번호 가져오기
-            ssid = properties.getProperty("ssid");
-            password= properties.getProperty("wpa_passphrase");
-        } catch (IOException e) {
-            return "오류 발생: " + e.getMessage();
-        }
-        info.add(ssid); info.add(password);
+        info.add(settingService.getSsid());
+        info.add(settingService.getWifipassword());
         return info;
     }
+
     //관리자 아이디 비밀번호 변경
     @PatchMapping("/changeauth")
-    public String handleChangePassword(@RequestBody Map<String, String> request) {
+    public boolean handleChangePassword(@RequestBody Map<String, String> request) {
         String newusername=request.get("newusername");
         String newpassword = request.get("newpassword");
-        if (settingService.changeUserAuth(newusername,newpassword)) {
-            return "관리자 정보 변경 성공";
-        } else {
-            return "관리자 정보 변경 실패";
-        }
+        return settingService.changeUserAuth(newusername,newpassword);
     }
     //관리자 비밀번호 변경
     @PostMapping("/changepassword")
@@ -84,35 +77,36 @@ public class SettingController {
         if(authService.authenticate(password)){
             if(newpassword.equals(newpasswordcheck)){
                 authService.setAdminPassword(newpassword);
-                return "비밀번호 변경 완료";
+                return "변경 완료";
             }else {
-                return "비밀번호 확인 틀림";
+                return "비밀번호 확인이 맞지 않습니다.";
             }
         }else{
-            return "비밀번호 틀림";
+            return "비밀번호가 틀렸습니다.";
         }
     }
     //와이파이 정보 변경
     @PatchMapping("/wifipassword")
-    public String changePassword(@RequestBody Map<String,String> request) {
+    public boolean changePassword(@RequestBody Map<String,String> request) {
+        boolean done=false;
         String ssid=request.get("ssid");
         String newPassword = request.get("newpassword");
         try{
             return settingService.changeWifiPassword(ssid,newPassword,path);
-        }catch (Exception e) {
+        }catch(Exception e){
             e.printStackTrace();
-            return "오류 발생: " + e.getMessage();
+            return false;
         }
     }
 
     @PatchMapping("/channel")
-    public String changeChannel(@RequestBody Map<String, String> request) {
+    public boolean changeChannel(@RequestBody Map<String, String> request) {
         String channel = request.get("channel");
         try{
             return settingService.changeWifiChannel(channel,path);
         }catch(Exception e){
             e.printStackTrace();
-            return "오류 발생: " + e.getMessage();
+            return false;
         }
     }
 }
