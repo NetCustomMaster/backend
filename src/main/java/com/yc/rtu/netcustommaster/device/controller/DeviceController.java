@@ -1,6 +1,7 @@
 package com.yc.rtu.netcustommaster.device.controller;
 
 import com.yc.rtu.netcustommaster.device.service.DeviceService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import static com.yc.rtu.netcustommaster.util.SseEmitterUtil.createEmitterWithMe
 public class DeviceController {
     private final DeviceService deviceService;
 
+    @Operation(summary = "SSE")
     @GetMapping
     public SseEmitter streamTrafficData() {
         return createEmitterWithMessageProvider(()-> deviceService.getTrafficData().toJson());

@@ -2,6 +2,7 @@ package com.yc.rtu.netcustommaster.systemInfo.controller;
 
 import com.yc.rtu.netcustommaster.systemInfo.dto.response.SpeedTestCliResponseDto;
 import com.yc.rtu.netcustommaster.systemInfo.service.SystemInfoService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class SystemInfoController {
 
     private final SystemInfoService systemInfoService;
 
+    @Operation(summary = "SSE")
     @GetMapping("/resource")
     public SseEmitter streamSystemInfo() {
         return createEmitterWithMessageProvider(() -> systemInfoService.getSystemInfo().toJson());
