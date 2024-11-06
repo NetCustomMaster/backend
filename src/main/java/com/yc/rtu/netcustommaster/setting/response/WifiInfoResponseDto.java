@@ -10,14 +10,5 @@ public class WifiInfoResponseDto {
     private String wifipassword;
     private String channel;
     private String band;
-
-    public String toJson() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "{}"; // 오류 발생 시 빈 JSON 반환
-        }
-    }
+    private String message;
 }

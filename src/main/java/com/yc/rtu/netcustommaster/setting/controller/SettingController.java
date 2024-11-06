@@ -2,19 +2,15 @@ package com.yc.rtu.netcustommaster.setting.controller;
 
 import com.yc.rtu.netcustommaster.auth.service.AuthService;
 import com.yc.rtu.netcustommaster.setting.response.SettingResponseDto;
+import com.yc.rtu.netcustommaster.setting.response.WifiInfoResponseDto;
 import com.yc.rtu.netcustommaster.setting.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 @RestController
 @RequestMapping("/api/v1/setting")
@@ -26,10 +22,8 @@ public class SettingController {
     final String path = "hostapd.conf";
     //Wifi 대역폭 설정
     @PatchMapping("/band")
-    public String updateWifiBand(@RequestBody Map<String, String> request) {
+    public ResponseEntity<SettingResponseDto> updateWifiBand(@RequestBody Map<String, String> request) {
         String band = request.get("band");
-        //hostapd.conf 파일에서 hwMode 가 g이면 2.4ghz a이면 5ghz인데
-        //사용자의 band 입력값에 따라 이를 설정
         String hwMode = "g";
         String channel = "6";
         if ("2".equals(band)) {
@@ -39,28 +33,26 @@ public class SettingController {
             hwMode = "a";
             channel = "36";
         }
-        return settingService.changeWifiBand(path,hwMode,channel);
+        return ResponseEntity.ok(settingService.changeWifiBand(path,hwMode,channel));
     }
 
     @GetMapping("/reset")
-    public String reset(){
-        settingService.Reset();
-        return "사용자 정보 리셋 완료";
+    public ResponseEntity<String> reset(){
+        return ResponseEntity.ok(settingService.Reset());
     }
 
     @GetMapping("/band")
-    public String band(){
-        String band="";
-        band=settingService.getBand();
-        return band;
+    public ResponseEntity<String> band(){
+        String band=settingService.getBand();
+        return ResponseEntity.ok(band);
     }
 
     @GetMapping("/wifipassword")
-    public Object getWifiConfig() {
+    public ResponseEntity<List<String>> getWifiConfig() {
         List<String> info=new ArrayList<>();
         info.add(settingService.getSsid());
         info.add(settingService.getWifipassword());
-        return info;
+        return ResponseEntity.ok(info);
     }
 
     //관리자 아이디 비밀번호 변경

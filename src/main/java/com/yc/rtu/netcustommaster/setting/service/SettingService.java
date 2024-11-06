@@ -19,12 +19,19 @@ public class SettingService {
     @Autowired
     private AuthService authService;
 
-    public void Reset(){
+    public String Reset(){
+        SettingResponseDto settingResponse=new SettingResponseDto();
         Properties config=authService.loadConfig();
         config.setProperty("admin.password","");
         config.setProperty("admin.username","");
         config.setProperty("first_time","true");
-        authService.saveConfig(config);
+        try{
+            authService.saveConfig(config);
+            settingResponse.setMessage("사용자 정보 리셋");
+        } catch (Exception e) {
+            settingResponse.setMessage("사용자 정보 리셋 실패");
+        }
+        return settingResponse.getMessage();
     }
     //관리자 비밀번호 변경
     public String changeUserAuth(String username,String password){
@@ -65,7 +72,7 @@ public class SettingService {
                 band="5";
             }
         }catch(IOException e){
-            return e.getMessage();
+           e.printStackTrace();
         }
         return band;
     }
@@ -115,7 +122,7 @@ public class SettingService {
         return wifiInfo;
     }
     //와이파이 대역폭변경
-    public String changeWifiBand(String path,String hwMode,String channel){
+    public SettingResponseDto changeWifiBand(String path,String hwMode,String channel){
         SettingResponseDto response=new SettingResponseDto();
         String command = String.format(
                 "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +
@@ -129,7 +136,7 @@ public class SettingService {
         }catch(Exception e){
             response.setMessage("Wifi 대역폭 변경 실패");
         }
-        return response.getMessage();
+        return response;
     }
     //와이파이 비밀번호 변경
     public String changeWifiPassword(String ssid,String password,String path){
