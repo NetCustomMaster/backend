@@ -16,7 +16,7 @@ import static com.yc.rtu.netcustommaster.util.CommandExecutor.executeCommand;
 public class DeviceService {
 
     public DeviceResponseDto getTrafficData() {
-        String command = "sudo iftop -i eth0 -t -s 1"; // 1초 동안의 트래픽 모니터링
+        String command = "sudo iftop -i wlan0 -t -s 1"; // 1초 동안의 트래픽 모니터링
         String output = executeCommand(command);
         return extractIPAndTraffic(output);
     }
