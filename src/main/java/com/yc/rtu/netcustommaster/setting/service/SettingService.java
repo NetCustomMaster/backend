@@ -56,7 +56,7 @@ public class SettingService {
         Properties properties=new Properties();
         String hwmode="";
         String band="";
-        try(FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")){
+        try(FileInputStream fis = new FileInputStream("/etc/hostapd/hostapd.conf")){
             properties.load(fis);
             hwmode=properties.getProperty("hw_mode");
             if(hwmode.equals("g")){
@@ -73,7 +73,7 @@ public class SettingService {
     public String getSsid(){
         Properties properties=new Properties();
         String ssid="";
-        try(FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")){
+        try(FileInputStream fis = new FileInputStream("/etc/hostapd/hostapd.conf")){
             properties.load(fis);
             ssid=properties.getProperty("ssid");
         }catch(IOException e){
@@ -85,7 +85,7 @@ public class SettingService {
     public String getChannel(){
         Properties properties=new Properties();
         String channel="";
-        try(FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")){
+        try(FileInputStream fis = new FileInputStream("/etc/hostapd/hostapd.conf")){
             properties.load(fis);
             channel=properties.getProperty("channel");
         }catch(IOException e){
@@ -97,7 +97,7 @@ public class SettingService {
     public String getWifipassword(){
         Properties properties=new Properties();
         String wifipassword="";
-        try(FileInputStream fis = new FileInputStream("etc/hostapd/hostapd.conf")){
+        try(FileInputStream fis = new FileInputStream("/etc/hostapd/hostapd.conf")){
             properties.load(fis);
             wifipassword=properties.getProperty("wpa_passphrase");
         }catch(IOException e){

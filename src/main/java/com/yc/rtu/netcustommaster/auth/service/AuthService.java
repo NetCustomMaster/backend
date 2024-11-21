@@ -22,6 +22,7 @@ public class AuthService {
         }
         return config;
     }
+
     // 설정 파일에 정보 저장하기
     public void saveConfig(Properties config) {
         try (FileOutputStream output = new FileOutputStream(CONFIG_PATH)) {
