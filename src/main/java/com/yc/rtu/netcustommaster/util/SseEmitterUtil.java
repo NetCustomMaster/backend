@@ -18,23 +18,35 @@ public class SseEmitterUtil {
                 if (message != null) {
                     emitter.send(SseEmitter.event().data(message));
                 }
-            } catch (IOException e) {
+            } catch (IllegalStateException | IOException e) {
                 emitter.completeWithError(e);
-                executorService.shutdown();
+                if (!executorService.isShutdown()) {
+                    executorService.shutdown();
+                }
             }
         }, 0, 1, TimeUnit.SECONDS); // 1초마다 데이터 전송
 
-        emitter.onCompletion(executorService::shutdown);
+        emitter.onCompletion(() -> {
+            if (!executorService.isShutdown()) {
+                executorService.shutdown();
+            }
+        });
+
         emitter.onTimeout(() -> {
-            emitter.complete();
-            executorService.shutdown();
+            try {
+                emitter.complete();
+            } finally {
+                if (!executorService.isShutdown()) {
+                    executorService.shutdown();
+                }
+            }
         });
 
         return emitter;
     }
 
-    // 메시지를 제공하는 인터페이스
     public interface MessageProvider {
         String getMessage();
     }
 }
+

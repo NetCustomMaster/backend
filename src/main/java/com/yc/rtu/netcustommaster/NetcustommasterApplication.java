@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class NetcustommasterApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(NetcustommasterApplication.class, args);
     }
 }
