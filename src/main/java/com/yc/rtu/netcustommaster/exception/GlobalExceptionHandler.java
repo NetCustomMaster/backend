@@ -8,6 +8,5 @@ import org.springframework.web.context.request.async.AsyncRequestNotUsableExcept
 public class GlobalExceptionHandler {
     @ExceptionHandler(AsyncRequestNotUsableException.class)
     public void handleAsyncException() {
-        // 로깅 또는 처리
     }
 }
