@@ -39,7 +39,7 @@ public class SettingController {
             hwMode = "a";
             channel = "36";
         }
-        return settingService.changeWifiBand(hwMode,channel);
+        return settingService.changeWifiBand(path,hwMode,channel);
     }
 
     @GetMapping("/reset")

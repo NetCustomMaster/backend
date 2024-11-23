@@ -115,16 +115,16 @@ public class SettingService {
         return wifiInfo;
     }
     //와이파이 대역폭변경
-    public String changeWifiBand(String hwMode,String channel){
+    public String changeWifiBand(String path,String hwMode,String channel){
         SettingResponseDto response=new SettingResponseDto();
         String command = String.format(
-                "sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +
+                "cd /etc/hostapd && sudo sed -i 's/hw_mode=.*/hw_mode=%s/' %s && " +
                         "sudo sed -i 's/channel=[0-9]*$/channel=%s/' %s && "+
                         "sudo systemctl restart hostapd",
-                hwMode,"/etc/hostapd/hostapd.conf",channel,"/etc/hostapd/hostapd.conf"
+                hwMode,path,channel,path
         );
-        System.out.println(command);
         try{
+            executeCommand(command);
             response.setMessage("Wifi 대역폭 변경 성공");
         }catch(Exception e){
             response.setMessage("Wifi 대역폭 변경 실패");
